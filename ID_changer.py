@@ -11,7 +11,6 @@ new_id = 1
 # update Node tags
 for node in root.findall('.//node'):
     old_id = node.get('id')
-    print(old_id)
     id_mapping[old_id] = str(new_id)
     node.set('id', str(new_id))
     new_id += 1
@@ -64,7 +63,7 @@ for relation in root.findall('.//relation'):
     update_relation_members(relation)
 
 
-tree.write('new_file.osm', encoding='utf-8', xml_declaration=True)
+tree.write('lanelet2_map.osm', encoding='utf-8', xml_declaration=True)
 
 # Save the ID mapping to a separate file for manually checking files
 with open('id_mapping.txt', 'w') as mapping_file:
