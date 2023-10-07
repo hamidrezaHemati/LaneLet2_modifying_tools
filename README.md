@@ -84,7 +84,7 @@ In general, regulatory elements consist of tags that generally express the type 
     <tag k="local_x" v="3760.4447" />
     <tag k="local_y" v="73753.0484" />
     <tag k="ele" v="19.33" />
-  </node>
+</node>
 
 **way:** linestrings
 
@@ -105,7 +105,7 @@ In general, regulatory elements consist of tags that generally express the type 
     <tag k="subtype" v="solid" />
     <tag k="color" v="white" />
     <tag k="width" v="0.2 m" />
-  </way>
+</way>
 
 **relation:** lanelets, Areas, regulatory_elements and exc.
 
@@ -123,11 +123,11 @@ In general, regulatory elements consist of tags that generally express the type 
     <tag k="dmp_lane_number" v="1" />
     <tag k="dmp_rfdb_work_unit_id" v="10808" />
     <tag k="udbx3_lane_type" v="normal_driving_lane" />
-  </relation>
+</relation>
 
   <relation id="4789">
     <member type="way" role="refers" ref="4310" />
     <member type="way" role="ref_line" ref="4301" />
     <tag k="type" v="regulatory_element" />
     <tag k="subtype" v="traffic_light" />
-  </relation>
+</relation>
