@@ -1,39 +1,41 @@
 import xml.etree.ElementTree as ET
 
-# Replace 'your_file.osm' with the path to your .osm file
 file_path = 'test_files/test/lanelet2_map.osm'
-ID_mapping = {}
-
 # Parse the .osm file
 tree = ET.parse(file_path)
 root = tree.getroot()
+# Create a mapping dictionary for old IDs to new IDs
+id_mapping = {}
+current_id = 1
 
-# You can now access and manipulate the XML data through the 'root' element
-# Find and iterate through all <node> elements
-new_ID = 1
-for element in root:
-    if element.tag == "MetaInfo":
-        continue
-    print(element.tag, element.attrib)
-    ID_mapping[element.attrib['id']] = new_ID
-    new_ID += 1
+print("debug 1")
+# Process Node tags
+for node in root.findall('.//node'):
+    print("debug 2")
+    old_id = node.get('id')
+    print(old_id)
+    id_mapping[old_id] = str(current_id)
+    node.set('id', str(current_id))
+    current_id += 1
 
-for key, value in ID_mapping.items():
-    print(key, ":", value)
+# Process Way tags
+for way in root.findall('.//way'):
+    old_id = way.get('id')
+    id_mapping[old_id] = str(current_id)
+    way.set('id', str(current_id))
+    current_id += 1
 
-# for node in root.findall('.//node'):
-#     node_id = node.get('id')
-#     lat = node.get('lat')
-#     lon = node.get('lon')
-#
-#     print(f"Node ID: {node_id}")
-#     print(f"Latitude: {lat}")
-#     print(f"Longitude: {lon}")
-#
-#     # Iterate through <tag> elements within the <node>
-#     for tag in node.findall('./tag'):
-#         tag_key = tag.get('k')
-#         tag_value = tag.get('v')
-#         print(f"Tag Key: {tag_key}, Tag Value: {tag_value}")
-#
-#     print("\n")  # Separating each node's data
+# Process Relation tags
+for relation in root.findall('.//relation'):
+    old_id = relation.get('id')
+    id_mapping[old_id] = str(current_id)
+    relation.set('id', str(current_id))
+    current_id += 1
+
+# Write the modified XML back to a file
+tree.write('new_file.xml', encoding='utf-8', xml_declaration=True)
+
+# Save the ID mapping to a separate file (if needed)
+with open('id_mapping.txt', 'w') as mapping_file:
+    for old_id, new_id in id_mapping.items():
+        mapping_file.write(f'{old_id} => {new_id}\n')
