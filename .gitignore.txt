@@ -1,1 +1,2 @@
 orginal_files/
+.idea/
