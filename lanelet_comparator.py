@@ -18,10 +18,10 @@ def tag_extractor(root_tag, root):
         for tag in node.findall('./tag'):
             # Get the value of the 'k' attribute and append it to the list
             tag_key = tag.get('k')
-            if root_tag == 'node':
-                _list.append(tag_key)
-            else:
+            if root_tag != 'node' and (tag_key == 'type' or tag_key == 'subtype'):
                 tag_value = tag.get('v')
+                _list.append((tag_key, tag_value))
+            else:
                 _list.append(tag_key)
 
     # Remove duplicates by converting the list to a set and back to a list (if needed)
