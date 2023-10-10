@@ -1,2 +1,7 @@
-orginal_files/
+# Ignore the data directory
+data/
+
+# Ignore the idea directory
+test_files/*
+compare_test/*
 .idea/
