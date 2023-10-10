@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 
 file_path_A = 'compare_test/A/lanelet2_map.osm'
-file_path_B = 'compare_test/A/lanelet2_map.osm'
+file_path_B = 'compare_test/B/lanelet2_map.osm'
 # Parse the .osm file
 treeA = ET.parse(file_path_A)
 rootA = treeA.getroot()
@@ -22,7 +22,7 @@ def tag_extractor(root_tag, root):
                 _list.append(tag_key)
             else:
                 tag_value = tag.get('v')
-                _list.append((tag_key, tag_value))
+                _list.append(tag_key)
 
     # Remove duplicates by converting the list to a set and back to a list (if needed)
     return list(set(_list))
@@ -43,7 +43,6 @@ def compare(list_A, list_B):
     unique_to_B = list(elements_in_B_not_in_A)
     common_elements_list = list(common_elements)
 
-    print("-----------------------------------------------------------------------")
     # Print common elements in green
     print("\033[92mCommon elements:", common_elements_list)
     # Reset the color to default
@@ -68,9 +67,13 @@ node_tags_B = tag_extractor('node', rootB)
 way_tags_B = tag_extractor('way', rootB)
 relation_tags_B = tag_extractor('relation', rootB)
 
+print('Nodes')
 compare(node_tags_A, node_tags_B)
+print('Ways')
 compare(way_tags_A, way_tags_B)
+print('Relations')
 compare(relation_tags_A, relation_tags_B)
+
 
 
 
