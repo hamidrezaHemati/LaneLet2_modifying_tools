@@ -1,7 +1,10 @@
 # Ignore the data directory
 data/
 
-# Ignore the idea directory
+# Ignore some directory
 test_files/*
 compare_test/*
 .idea/
+
+# Ignore some files
+lanelet2_map.osm
