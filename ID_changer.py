@@ -29,7 +29,10 @@ for relation in root.findall('.//relation'):
     relation.set('id', str(new_id))
     new_id += 1
 
-# Process Way tags to update references to Node IDs
+# Create a list of tags to update (e.g., 'original_polygon_ref')
+way_tags_to_update = ['original_polygon_ref']
+
+# Process Way tags to update references to Node IDs and specific tags
 for way in root.findall('.//way'):
     for nd in way.findall('.//nd'):
         old_ref = nd.get('ref')
@@ -37,7 +40,17 @@ for way in root.findall('.//way'):
         if new_ref:
             nd.set('ref', new_ref)
 
-# Process Relation tags to update references to Way IDs
+    # Update specific tags within Way elements
+    for tag in way.findall('./tag'):
+        tag_key = tag.get('k')
+        tag_value = tag.get('v')
+        if tag_key in way_tags_to_update:
+            old_value = tag_value
+            new_value = id_mapping.get(old_value)
+            if new_value:
+                tag.set('v', new_value)
+
+# Process Relation tags to update references to Way IDs and specific tags
 for relation in root.findall('.//relation'):
     for member in relation.findall('.//member[@type="way"]'):
         old_ref = member.get('ref')
