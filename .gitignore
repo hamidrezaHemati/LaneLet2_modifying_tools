@@ -4,6 +4,7 @@ data/
 # Ignore some directory
 test_files/*
 compare_test/*
+updated_file/*
 .idea/
 
 # Ignore some files

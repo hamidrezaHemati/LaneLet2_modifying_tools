@@ -1,13 +1,24 @@
 import xml.etree.ElementTree as ET
+import os
 
 # Path of the file you want to update its ID's
 file_path = 'test_files/lanelet2_map.osm'
+output_directory = 'updated_file'
 # Path of the files you want to display_comparison to each other
 file_path_A = 'compare_test/A/Shinjuku.osm'
-file_path_B = 'compare_test/B/kashiwa_standard.osm'
+file_path_B = 'compare_test/B/lanelet2_map.osm'
 
 # Create a mapping dictionary for old IDs to new IDs
 id_mapping = {}
+
+
+def get_output_file_path():
+    # Create the directory if it doesn't exist
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
+    # Construct the output file path
+    output_file_path = os.path.join(output_directory, os.path.basename(file_path))
+    return output_file_path
 
 
 def update_relation_members(root, element):
@@ -31,7 +42,10 @@ def update_tags(root, new_id, tag_name):
     return new_id
 
 
-def update_ids(root, tree):
+def update_ids():
+    tree = ET.parse(file_path)
+    root = tree.getroot()
+
     new_id = 1
     # update Node tags
     new_id = update_tags(root, new_id, 'node')
@@ -71,7 +85,28 @@ def update_ids(root, tree):
     for relation in root.findall('.//relation'):
         update_relation_members(root, relation)
 
-    tree.write('lanelet2_map.osm', encoding='utf-8', xml_declaration=True)
+    # Write the modified XML back to the output file
+    tree.write(get_output_file_path(), encoding='utf-8', xml_declaration=True)
+
+
+def delete_tags_from_nodes(node_tags_to_delete):
+    # Parse the .osm file
+    tree = ET.parse(get_output_file_path())
+    root = tree.getroot()
+    # Iterate through the <node> elements
+    for node in root.findall('.//node'):
+        # Iterate through the <tag> elements within each <node> element
+        tags_to_delete = []
+        for tag in node.findall('./tag'):
+            tag_key = tag.get('k')
+            if tag_key in node_tags_to_delete:
+                tags_to_delete.append(tag)
+
+        # Delete the specified tags within <node> elements
+        for tag in tags_to_delete:
+            node.remove(tag)
+    # Write the modified XML back to the same file
+    tree.write(get_output_file_path(), encoding='utf-8', xml_declaration=True)
 
 
 def save_id_mapping():
@@ -99,7 +134,7 @@ def tag_extractor(root_tag, root):
     return list(set(_list))
 
 
-def display_comparison(list_A, list_B):
+def venn_diagram(list_A, list_B):
     set_A = set(list_A)
     set_B = set(list_B)
     # Elements in list A but not in list B
@@ -113,7 +148,11 @@ def display_comparison(list_A, list_B):
     unique_to_A = list(elements_in_A_not_in_B)
     unique_to_B = list(elements_in_B_not_in_A)
     common_elements_list = list(common_elements)
+    return unique_to_A, unique_to_B, common_elements_list
 
+
+def display_comparison(list_A, list_B):
+    unique_to_A, unique_to_B, common_elements_list = venn_diagram(list_A, list_B)
     # Print common elements in green
     print("\033[92mCommon elements:", common_elements_list)
     # Reset the color to default
@@ -152,15 +191,23 @@ def compare():
     display_comparison(relation_tags_A, relation_tags_B)
 
 
-def main():
-    tree = ET.parse(file_path)
-    root = tree.getroot()
+def modify_lanelet():
     # ID reset
-    # update_ids(root, tree)
-    # save_id_mapping()
+    update_ids()
+    save_id_mapping()
+    # deleting extra tags
+    node_tags_to_delete = ['along_slope', 'lane_width', 'heading', 'shoulder_width', 'cross_slope', 'curvature']
+    delete_tags_from_nodes(node_tags_to_delete)
+
+
+def main():
+    # modify lanelet2 file
+    # modify_lanelet()
 
     # comparing lanelet files
     compare()
+
+
 
 
 if __name__ == '__main__':
