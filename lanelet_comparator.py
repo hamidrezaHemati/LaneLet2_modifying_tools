@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 
-file_path_A = 'compare_test/A/lanelet2_map.osm'
-file_path_B = 'compare_test/B/lanelet2_map.osm'
+file_path_A = 'compare_test/A/Shinjuku.osm'
+file_path_B = 'compare_test/B/kashiwa_standard.osm'
 # Parse the .osm file
 treeA = ET.parse(file_path_A)
 rootA = treeA.getroot()
