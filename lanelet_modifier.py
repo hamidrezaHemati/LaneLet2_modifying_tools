@@ -5,7 +5,7 @@ import os
 file_path = 'test_files/lanelet2_map.osm'
 output_directory = 'updated_file'
 # Path of the files you want to display_comparison to each other
-file_path_A = 'compare_test/A/Shinjuku.osm'
+file_path_A = 'compare_test/A/lanelet2_map.osm'
 file_path_B = 'compare_test/B/lanelet2_map.osm'
 
 # Create a mapping dictionary for old IDs to new IDs
@@ -193,8 +193,8 @@ def compare():
 
 def modify_lanelet():
     # ID reset
-    update_ids()
-    save_id_mapping()
+    # update_ids()
+    # save_id_mapping()
     # deleting extra tags
     node_tags_to_delete = ['along_slope', 'lane_width', 'heading', 'shoulder_width', 'cross_slope', 'curvature']
     delete_tags_from_nodes(node_tags_to_delete)
@@ -206,8 +206,6 @@ def main():
 
     # comparing lanelet files
     compare()
-
-
 
 
 if __name__ == '__main__':
