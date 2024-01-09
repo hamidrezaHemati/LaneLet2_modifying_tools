@@ -2,9 +2,9 @@
 data/
 
 # Ignore some directory
-test_files/*
+modify/*
 compare_test/*
-updated_file/*
+elevation/*
 .idea/
 
 # Ignore some files
