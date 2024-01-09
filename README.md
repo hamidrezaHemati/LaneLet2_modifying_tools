@@ -1,5 +1,8 @@
-# LaneLet2_ID_Mapping
-Changing Tag ID's of a poorly made LL2 file to be able to use it on Autoware simulator
+# LaneLet2_modifying_tools
+This repo contains of 3 codes that do some things with lanelet2 file
+1. lanelet_modifier: changing ID of all the components and delete some desired tags from components(these tags are in a list so you can change the list or remove it).
+2. lanelet_comparetor: this code can compare 2 lanelet2 files with each other and show if there is any differences among used tags and components.
+3. elevation_changer: calculates the avg elevation of all nodes and change all the ele(height) values of nodes with avg. for flatting the lanelet2 file.
 
 ## Table of Contents
     - Problem
@@ -8,21 +11,26 @@ Changing Tag ID's of a poorly made LL2 file to be able to use it on Autoware sim
 
 ## Problem Definition
 We had a lanelet2 file of a city in Japan and we wanted to use that as a main map to improve planning and mapping algorithms. But, the LaneLet2 map had some unknown problems which made it impossible to run it on Autoware simulator.  
-**After spending a lot of time and energy, we came to the conclusion that one of the main problems of this file is its used id's.**
+**After spending a lot of time and energy, we came to the conclusion that this file has two main problems.**
+1. IDs are not set well
+2. there are some harmful tags which needed to be removed from the file.
 
 for example, look at the node below:
+
+```python
 <node id="3100422458000" lat="35.89625133963436" lon="139.94226577007007">
     <tag k="mgrs_code" v="54SVE045729"/>
     <tag k="local_x" v="4542.5099"/>
     <tag k="local_y" v="72957.9607"/>
     <tag k="ele" v="18.58"/>
   </node>
+```
 
 this is the first node and its id is **3100422458000**. All of the tags have the same problem so we have to write a code that changes the ID's.
 
 
 ## Soulution:
-for this task we consider a naive way. I wrote a code that read the file and map all the ID's with numbers starting at 1. for example if we have 1000 nodes the ID's are in range from 1 to 1000. i used dictionary to map the old and new ID's
+for this task we consider a naive way. A code has written to read the file and to map all the ID's with numbers starting at 1. for example if we have 1000 nodes the ID's are in range from 1 to 1000. This code creates a txt file that stores the mapping between old and new ids.
 
 
 
